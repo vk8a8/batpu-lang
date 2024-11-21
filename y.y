@@ -19,7 +19,7 @@ struct node {
     } nd_obj;
 }
 
-%token <nd_obj> ID ADD
+%token <nd_obj> ID ADD MEM
 %type <nd_obj> expr program
 
 %%
@@ -29,8 +29,15 @@ program
 ;
 
 expr
-: expr ADD expr { printf("ADD %s %s\n", $1.name, $3.name); }
-| ID            { $$ = $1; }
+: expr expr
+| expr ADD expr
+    { printf(
+    "LOD r1 %s\n"
+    "LOD r2 %s\n"
+    "ADD r1 r2 r15\n",
+    $1.name, $3.name); }
+| ID            { printf("%s\n", $1); $$ = $1; }
+| MEM           { $$ = $1; }
 ;
 
 %%
