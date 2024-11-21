@@ -20,12 +20,13 @@ struct node {
 }
 
 %token <nd_obj> ID ADD
-%type <nd_obj> expr
+%type <nd_obj> expr program
 
 %%
-program: stmt '\n';
-
-stmt: expr ';';
+program
+: program expr ';'
+| // empty
+;
 
 expr
 : expr ADD expr { printf("ADD %s %s\n", $1.name, $3.name); }
