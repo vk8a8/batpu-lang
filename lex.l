@@ -9,7 +9,8 @@ digit [0-9]
 {alpha}({alpha}|{digit})*          { strcpy(yylval.nd_obj.name,(yytext)); return ID; }
 "+"                                { strcpy(yylval.nd_obj.name,(yytext)); return ADD; }
 [\n]           {;}
-";"               { return *yytext; }
+" "|"\t"             {;}
+.               { return *yytext; }
 %%
 
 int yywrap() {
