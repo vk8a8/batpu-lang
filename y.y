@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+#include <stdint.h>
 
 int yylex();
 void yyerror(char* s);
@@ -10,6 +11,8 @@ struct node {
     char* token;
 };
 
+uint8_t reg = 1;
+
 %}
 
 %union {
@@ -19,7 +22,7 @@ struct node {
     } nd_obj;
 }
 
-%token <nd_obj> ID ADD MEM
+%token <nd_obj> ADD MEM
 %type <nd_obj> expr program
 
 %%
@@ -31,13 +34,8 @@ program
 expr
 : expr expr
 | expr ADD expr
-    { printf(
-    "LOD r1 %s\n"
-    "LOD r2 %s\n"
-    "ADD r1 r2 r15\n",
-    $1.name, $3.name); }
-| ID            { printf("%s\n", $1); $$ = $1; }
-| MEM           { $$ = $1; }
+    { printf("%d\n", reg); }
+| MEM           { printf("ldi r%d %s\n", reg++, $1); $$ = $1; }
 ;
 
 %%
