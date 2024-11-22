@@ -15,8 +15,6 @@ name  [a-zA-Z_][a-zA-Z_0-9]*
 
 "=="                { strcpy(yylval.nd_obj.name, yytext); return EQ_OP; }
 
-"+"                 { strcpy(yylval.nd_obj.name, yytext); return ADD; }
-
 {name}              { strcpy(yylval.nd_obj.name, yytext); return IDENT; }
 
 " "                 { ; }

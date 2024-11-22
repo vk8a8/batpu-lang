@@ -25,7 +25,7 @@ extern FILE* yyin;
     } nd_obj;
 }
 
-%token <nd_obj> ADD MEM ASM LABEL GOTO IDENT EQ_OP IF
+%token <nd_obj> MEM ASM LABEL GOTO IDENT EQ_OP IF
 %type <nd_obj> expr program inlasm label goto_stmt if_stmt
 
 %%
@@ -64,7 +64,7 @@ inlasm
 
 expr
 : expr expr
-| expr ADD expr {   printf("lod r%d r%d\nlod r%d r%d\n", reg-1, reg-1, reg, --reg); // The function parses the "--var" in backwards order
+| expr '+' expr {   printf("lod r%d r%d\nlod r%d r%d\n", reg-1, reg-1, reg, --reg); // The function parses the "--var" in backwards order
                     printf("add r%d r%d r%d\n\n", reg, reg - 1, reg); }
 | MEM           { printf("ldi r%d %s\n", reg++, $1); $$ = $1; }
 ;
