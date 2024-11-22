@@ -13,7 +13,7 @@ struct node {
 };
 
 uint8_t reg = 1;
-int lcounter = 0;
+uint16_t lcounter = 0;
 extern FILE* yyin;
 
 %}
