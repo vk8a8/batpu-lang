@@ -25,7 +25,7 @@ extern FILE* yyin;
     } nd_obj;
 }
 
-%token <nd_obj> MEM ASM LABEL GOTO IDENT EQ_OP IF
+%token <nd_obj> MEM ASM LABEL GOTO IDENT EQ_OP IF INTLIT
 %type <nd_obj> expr program inlasm label goto_stmt if_stmt
 
 %%
@@ -64,13 +64,16 @@ inlasm
 
 expr
 : expr expr
+| '(' expr ')'
 | expr '+' expr { printf("add r%d r%d r%d\n\n", reg - 1, reg, --reg - 1); }
+
+| INTLIT        { printf("ldi r%d %s\n", reg++, $1); }
 
 | MEM           { printf("ldi r%d %s\n", reg, $1);
                   printf("lod r%d r%d\n", reg++, reg); $$ = $1; }
 
-| MEM '=' expr  { printf("ldi r%d %s", reg, $1);
-                  printf("str r%d r%d", reg--, reg - 1); }  // Gah!!
+| MEM '=' expr  { printf("ldi r%d %s\n", reg, $1);
+                  printf("str r%d r%d\n", reg--, reg - 1); }  // Gah!!
 ;
 
 %%
