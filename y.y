@@ -22,19 +22,25 @@ uint8_t reg = 1;
     } nd_obj;
 }
 
-%token <nd_obj> ADD MEM
-%type <nd_obj> expr program
+%token <nd_obj> ADD MEM ASM
+%type <nd_obj> expr program inlasm
 
 %%
 program
-: program expr ';'
+: program program
+| expr ';'
+| inlasm
 | // empty
+;
+
+/* inline asm lol */
+inlasm
+: ASM           { printf("%s\n", $1); }
 ;
 
 expr
 : expr expr
-| expr ADD expr
-    { printf("%d\n", reg); }
+| expr ADD expr { printf("%d\n", reg); }
 | MEM           { printf("ldi r%d %s\n", reg++, $1); $$ = $1; }
 ;
 
