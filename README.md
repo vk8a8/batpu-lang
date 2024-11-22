@@ -1,10 +1,9 @@
 # MattBat-Vk8a8 Language
-This is a c-like language writin in Bison and Lex, designed specially for MattBatWings' "BatPU" Minecraft CPU.
+This is a C-like language written in Bison and Lex, designed specially for MattBatWings' "BatPU" Minecraft CPU.
 
 This is still in WIP,as it currently does not support:
 * Function declarations
 * Function calls
-* Variable writing
 * Automatically placed variables
 
 # How to use:

@@ -1,4 +1,7 @@
 a.out
+mbvl
+*.exe
+*.so
 lex.yy.c
 y.output
 y.tab.c

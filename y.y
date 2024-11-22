@@ -54,7 +54,7 @@ goto_stmt
 ;
 
 label
-: LABEL   { printf(".%s\n\n", $1); }
+: LABEL         { printf(".%s\n\n", $1); }
 ;
 
 /* inline asm lol */
@@ -64,9 +64,13 @@ inlasm
 
 expr
 : expr expr
-| expr '+' expr {   printf("lod r%d r%d\nlod r%d r%d\n", reg-1, reg-1, reg, --reg); // The function parses the "--var" in backwards order
-                    printf("add r%d r%d r%d\n\n", reg, reg - 1, reg); }
-| MEM           { printf("ldi r%d %s\n", reg++, $1); $$ = $1; }
+| expr '+' expr { printf("add r%d r%d r%d\n\n", reg - 1, reg, --reg - 1); }
+
+| MEM           { printf("ldi r%d %s\n", reg, $1);
+                  printf("lod r%d r%d\n", reg++, reg); $$ = $1; }
+
+| MEM '=' expr  { printf("ldi r%d %s", reg, $1);
+                  printf("str r%d r%d", reg--, reg - 1); }  // Gah!!
 ;
 
 %%
