@@ -22,15 +22,20 @@ uint8_t reg = 1;
     } nd_obj;
 }
 
-%token <nd_obj> ADD MEM ASM
-%type <nd_obj> expr program inlasm
+%token <nd_obj> ADD MEM ASM LABEL
+%type <nd_obj> expr program inlasm label
 
 %%
 program
 : program program
 | expr ';'
 | inlasm
-| // empty
+| label
+| /* empty */
+;
+
+label
+: LABEL        { printf(".%s\n", $1); }
 ;
 
 /* inline asm lol */
