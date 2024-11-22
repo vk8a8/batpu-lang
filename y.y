@@ -25,7 +25,7 @@ extern FILE* yyin;
     } nd_obj;
 }
 
-%token <nd_obj> MEM ASM LABEL GOTO IDENT EQ_OP IF INTLIT
+%token <nd_obj> MEM ASM LABEL GOTO IDENT EQ_OP NE_OP IF INTLIT
 %type <nd_obj> expr program inlasm label goto_stmt if_stmt
 
 %%
@@ -47,6 +47,8 @@ if_stmt
 logic_cmp
 : expr EQ_OP expr { printf("cmp r%d r%d\n", --reg, --reg);
                     printf("brh ne .l%d\n\n", lcounter);}
+| expr NE_OP expr { printf("cmp r%d r%d\n", --reg, --reg);
+                    printf("brh eq .l%d\n\n", lcounter);}
 ;
 
 goto_stmt
