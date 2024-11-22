@@ -22,8 +22,8 @@ uint8_t reg = 1;
     } nd_obj;
 }
 
-%token <nd_obj> ADD MEM ASM LABEL
-%type <nd_obj> expr program inlasm label
+%token <nd_obj> ADD MEM ASM LABEL GOTO IDENT
+%type <nd_obj> expr program inlasm label goto
 
 %%
 program
@@ -31,11 +31,16 @@ program
 | expr ';'
 | inlasm
 | label
+| goto ';'
 | /* empty */
 ;
 
+goto
+: GOTO IDENT    { printf("jmp .%s\n", $2.name); }
+;
+
 label
-: LABEL        { printf(".%s\n", $1); }
+: LABEL         { printf(".%s\n", $1); }
 ;
 
 /* inline asm lol */
