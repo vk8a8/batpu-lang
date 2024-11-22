@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
 
 int yylex();
 void yyerror(char* s);
@@ -70,8 +71,18 @@ expr
 
 %%
 
+void printHelp();
+
 int main(int argc, char* argv[]) {
-    yyin = fopen(argv[1], "rb");
+    for (int i = 0; i < argc; ++i) {
+        if (!strcmp(argv[i], "-h")) {
+            printHelp();
+            return 0;
+        }
+        else {
+            yyin = fopen(argv[i], "rb");
+        }
+    }
     
     yyparse();
 
@@ -81,4 +92,10 @@ int main(int argc, char* argv[]) {
 
 void yyerror(char* s) {
     fprintf(stderr, "yyerror: %s\n", s);
+}
+
+void printHelp() {
+    puts("Temporary help message.\n"
+         "\t-o <file>: choose output file\n"
+    );
 }
