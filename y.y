@@ -53,7 +53,7 @@ goto_stmt
 ;
 
 label
-: LABEL         { printf(".%s\n", $1); }
+: LABEL   { printf(".%s\n", $1); }
 ;
 
 /* inline asm lol */
@@ -63,7 +63,8 @@ inlasm
 
 expr
 : expr expr
-| expr ADD expr { printf("add r%d r%d r%d\n", reg-2, reg-1, reg-2); reg--; }
+| expr ADD expr {   printf("lod r%d r%d\nlod r%d r%d\n", reg, --reg, reg, --reg); // The function parses the "--var" in backwards order for some reason.
+                    printf("add r%d r%d r%d\n", reg, reg+1, reg); }
 | MEM           { printf("ldi r%d %s\n", reg++, $1); $$ = $1; }
 ;
 
