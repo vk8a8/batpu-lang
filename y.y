@@ -50,7 +50,7 @@ inlasm
 
 expr
 : expr expr
-| expr ADD expr { printf("%d\n", reg); }
+| expr ADD expr { printf("add r%d r%d r%d\n", reg-2, reg-1, reg-2); reg--; }
 | MEM           { printf("ldi r%d %s\n", reg++, $1); $$ = $1; }
 ;
 
