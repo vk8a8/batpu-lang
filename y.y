@@ -13,6 +13,7 @@ struct node {
 
 uint8_t reg = 1;
 int lcounter = 0;
+extern FILE* yyin;
 
 %}
 
@@ -69,7 +70,11 @@ expr
 %%
 
 int main() {
+    yyin = fopen("test.c", "rb");
+    
     yyparse();
+
+    fclose(yyin);
     return 0;
 }
 
