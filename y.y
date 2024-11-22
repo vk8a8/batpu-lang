@@ -12,6 +12,7 @@ struct node {
 };
 
 uint8_t reg = 1;
+int lcounter = 0;
 
 %}
 
@@ -22,8 +23,8 @@ uint8_t reg = 1;
     } nd_obj;
 }
 
-%token <nd_obj> ADD MEM ASM LABEL GOTO IDENT
-%type <nd_obj> expr program inlasm label goto
+%token <nd_obj> ADD MEM ASM LABEL GOTO IDENT EQ_OP IF ENDIF
+%type <nd_obj> expr program inlasm label goto_stmt endif
 
 %%
 program
@@ -31,11 +32,15 @@ program
 | expr ';'
 | inlasm
 | label
-| goto ';'
+| goto_stmt ';'
+| endif
 | /* empty */
 ;
 
-goto
+endif
+: ENDIF         { printf(".l%d\n", lcounter++); }
+
+goto_stmt
 : GOTO IDENT    { printf("jmp .%s\n", $2.name); }
 ;
 
