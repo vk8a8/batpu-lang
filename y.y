@@ -40,31 +40,31 @@ program
 
 if_stmt
 : IF '(' logic_cmp ')'
-'{' program '}' { printf(".l%d\n", lcounter++);}
+'{' program '}' { printf(".l%d ; IF \n", lcounter++);}
 ;
 
 logic_cmp
 : expr EQ_OP expr { printf("cmp r%d r%d\n", --reg, --reg);
-                    printf("brh ne .l%d\n", lcounter);}
+                    printf("brh ne .l%d\n\n", lcounter);}
 ;
 
 goto_stmt
-: GOTO IDENT    { printf("jmp .%s\n", $2.name); }
+: GOTO IDENT    { printf("jmp .%s\n\n", $2.name); }
 ;
 
 label
-: LABEL   { printf(".%s\n", $1); }
+: LABEL   { printf(".%s\n\n", $1); }
 ;
 
 /* inline asm lol */
 inlasm
-: ASM           { printf("%s\n", $1); }
+: ASM           { printf("%s ; inline \n", $1); }
 ;
 
 expr
 : expr expr
 | expr ADD expr {   printf("lod r%d r%d\nlod r%d r%d\n", reg-1, reg-1, reg, --reg); // The function parses the "--var" in backwards order
-                    printf("add r%d r%d r%d\n", reg, reg - 1, reg - 1); }
+                    printf("add r%d r%d r%d\n\n", reg, reg - 1, reg); }
 | MEM           { printf("ldi r%d %s\n", reg++, $1); $$ = $1; }
 ;
 
