@@ -23,8 +23,8 @@ int lcounter = 0;
     } nd_obj;
 }
 
-%token <nd_obj> ADD MEM ASM LABEL GOTO IDENT EQ_OP IF ENDIF
-%type <nd_obj> expr program inlasm label goto_stmt endif
+%token <nd_obj> ADD MEM ASM LABEL GOTO IDENT EQ_OP IF
+%type <nd_obj> expr program inlasm label goto_stmt if_stmt
 
 %%
 program
@@ -33,12 +33,19 @@ program
 | inlasm
 | label
 | goto_stmt ';'
-| endif
+| if_stmt
 | /* empty */
 ;
 
-endif
-: ENDIF         { printf(".l%d\n", lcounter++); }
+if_stmt
+: IF '(' logic_cmp ')'
+'{' program '}' { printf(".l%d\n", lcounter++);}
+;
+
+logic_cmp
+: expr EQ_OP expr { printf("cmp r%d r%d\n", --reg, --reg);
+                    printf("brh ne .l%d\n", lcounter);}
+;
 
 goto_stmt
 : GOTO IDENT    { printf("jmp .%s\n", $2.name); }
