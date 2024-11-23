@@ -26,22 +26,26 @@ extern FILE* yyin;
 }
 
 %token <nd_obj> MEM ASM LABEL GOTO IDENT EQ_OP NE_OP IF INTLIT
-%type <nd_obj> expr program inlasm label goto_stmt if_stmt
+%type <nd_obj> expr term assmt program inlasm label goto_stmt if_stmt ';'
 
 %%
-program
-: program program
-| expr ';'
-| inlasm
-| label
-| goto_stmt ';'
-| if_stmt
+full_program
+: full_program program
 | /* empty */
+;
+
+program
+: expr ';'       
+| assmt ';'
+| inlasm         
+| label          
+| goto_stmt ';'  
+| if_stmt        
 ;
 
 if_stmt
 : IF '(' logic_cmp ')'
-'{' program '}' { printf(".l%d ; IF \n", lcounter++);}
+'{' full_program '}' { printf(".l%d ; IF \n", lcounter++);}
 ;
 
 logic_cmp
@@ -65,19 +69,25 @@ inlasm
 ;
 
 expr
-: expr expr
-| '(' expr ')'
-| expr '+' expr { printf("add r%d r%d r%d\n\n", reg - 1, reg, --reg - 1); }
+: term
+| arit_expr
+;
 
-| INTLIT        { printf("ldi r%d %s\n", reg++, $1); }
-
-| MEM           { printf("ldi r%d %s\n", reg, $1);
-                  printf("lod r%d r%d\n", reg++, reg); $$ = $1; }
-
-| MEM '=' expr  { printf("ldi r%d %s\n", reg, $1);
+assmt
+: MEM '=' expr  { printf("ldi r%d %s\n", reg, $1);
                   printf("str r%d r%d\n", reg--, reg - 1); }  // Gah!!
 ;
 
+arit_expr
+: arit_expr '+' term { printf("add r%d r%d r%d\n\n", reg - 1, reg, --reg - 1); }
+| term '+' term { printf("add r%d r%d r%d\n\n", reg - 1, reg, --reg - 1); }
+;
+
+term
+: MEM           { printf("ldi r%d %s\n", reg, $1);
+                  printf("lod r%d r%d\n", reg++, reg); $$ = $1; }
+| INTLIT        { printf("ldi r%d %s\n", reg++, $1); }
+;
 %%
 
 void printHelp();
