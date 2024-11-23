@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include "y.tab.h"
 
 int yylex();
 void yyerror(char* s);
@@ -110,7 +111,8 @@ int main(int argc, char* argv[]) {
 }
 
 void yyerror(char* s) {
-    fprintf(stderr, "yyerror: %s\n", s);
+    extern int yylineno;
+    fprintf(stderr, "yyerror on line %d: %s\n", yylineno, s);
 }
 
 void printHelp() {

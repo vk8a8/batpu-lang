@@ -2,6 +2,8 @@
 #include "y.tab.h"
 %}
 
+%option yylineno
+
 digit [0-9]
 name  [a-zA-Z_][a-zA-Z_0-9]*
 
@@ -20,7 +22,8 @@ name  [a-zA-Z_][a-zA-Z_0-9]*
 {name}              { strcpy(yylval.nd_obj.name, yytext); return IDENT; }
 
 " "                 { ; }
-[\n]|[\r\n]         { ; }
+[\t]*               { ; }
+\r?[\n]           { yylineno++; }
 \/\/.*              { ; }
 \/\*(.|\n)*\*\/     { ; }
 .                   { return *yytext; }
