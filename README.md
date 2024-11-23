@@ -22,37 +22,42 @@ Run the program with `./mbvl.exe [input file] > [output file]`
 
 # Example program:
 ```
-:testlabel
-if ($1 + $2 == $3) {
-  $1 + $1;
-  %ldi r2 1
-  %str r2 r1
-  goto lab;
+$2 = 42;
+$1 = 1;
+
+:loop
+if ($1 != $2) {
+    $1 = $1 + 1;
+    goto loop;
 }
+%hlt
 ```
 This compiles to:
 ```
-.testlabel
-
-ldi r1 1
+ldi r1 42
 ldi r2 2
-lod r1 r1
-lod r2 r2
-add r2 r1 r2
-
-ldi r2 3
-cmp r1 r2
-brh ne .l0
-
+str r2 r1
 ldi r1 1
 ldi r2 1
-lod r1 r1
-lod r2 r2
-add r2 r1 r2
+str r2 r1
+.loop
 
-ldi r2 1 ; inline 
-str r2 r1 ; inline 
-jmp .lab
+ldi r1 1
+lod r1 r1
+ldi r2 2
+lod r2 r2
+cmp r1 r2
+brh eq .l0
+
+ldi r1 1
+lod r1 r1
+ldi r2 1
+add r1 r2 r1
+
+ldi r2 1
+str r2 r1
+jmp .loop
 
 .l0 ; IF 
+hlt ; inline 
 ```
