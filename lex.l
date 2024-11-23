@@ -20,7 +20,7 @@ name  [a-zA-Z_][a-zA-Z_0-9]*
 {name}              { strcpy(yylval.nd_obj.name, yytext); return IDENT; }
 
 " "                 { ; }
-[\n]                { ; }
+[\n]|[\r\n]         { ; }
 \/\/.*              { ; }
 \/\*(.|\n)*\*\/     { ; }
 .                   { return *yytext; }
