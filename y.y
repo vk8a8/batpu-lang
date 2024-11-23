@@ -60,12 +60,12 @@ goto_stmt
 ;
 
 label
-: LABEL         { printf(".%s\n\n", $1); }
+: LABEL         { printf(".%s\n\n", $1.name); }
 ;
 
 /* inline asm lol */
 inlasm
-: ASM           { printf("%s ; inline \n", $1); }
+: ASM           { printf("%s ; inline \n", $1.name); }
 ;
 
 expr
@@ -74,7 +74,7 @@ expr
 ;
 
 assmt
-: MEM '=' expr  { printf("ldi r%d %s\n", reg, $1);
+: MEM '=' expr  { printf("ldi r%d %s\n", reg, $1.name);
                   printf("str r%d r%d\n", reg--, reg - 1); }  // Gah!!
 ;
 
@@ -84,9 +84,9 @@ arit_expr
 ;
 
 term
-: MEM           { printf("ldi r%d %s\n", reg, $1);
+: MEM           { printf("ldi r%d %s\n", reg, $1.name);
                   printf("lod r%d r%d\n", reg++, reg); $$ = $1; }
-| INTLIT        { printf("ldi r%d %s\n", reg++, $1); }
+| INTLIT        { printf("ldi r%d %s\n", reg++, $1.name); }
 ;
 %%
 
