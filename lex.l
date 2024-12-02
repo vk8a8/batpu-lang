@@ -18,6 +18,10 @@ name  [a-zA-Z_][a-zA-Z_0-9]*
 "=="                { return EQ_OP; }
 "!="                { return NE_OP; }
 
+"~|"                { return BW_NOR; }
+"~&"                { return BW_NAND; }
+"~^"                { return BW_XNOR; }
+
 {digit}+            { strcpy(yylval.nd_obj.name, yytext); return INTLIT; }
 {name}              { strcpy(yylval.nd_obj.name, yytext); return IDENT; }
 
