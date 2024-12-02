@@ -27,7 +27,9 @@ extern FILE* yyin;
 }
 
 %token <nd_obj> MEM ASM LABEL GOTO IDENT EQ_OP NE_OP IF INTLIT
-%type <nd_obj> expr term assmt program inlasm label goto_stmt if_stmt ';'
+%type <nd_obj> expr mem assmt program inlasm label goto_stmt if_stmt ';'
+
+%left '+'
 
 %%
 full_program
@@ -36,12 +38,12 @@ full_program
 ;
 
 program
-: expr ';'       
+: expr ';'
 | assmt ';'
-| inlasm         
-| label          
-| goto_stmt ';'  
-| if_stmt        
+| inlasm
+| label
+| goto_stmt ';'
+| if_stmt
 ;
 
 if_stmt
@@ -70,8 +72,11 @@ inlasm
 ;
 
 expr
-: term
-| arit_expr
+: mem
+| expr '+' mem { printf("add r%d r%d r%d\n\n", reg - 1, reg, --reg - 1); }
+| expr '+' INTLIT { printf("adi r%d %s\n", reg - 1, $3.name); }
+| INTLIT '+' expr { printf("adi r%d %s\n", reg - 1, $1.name); }
+| INTLIT        { printf("ldi r%d %s\n", reg++, $1.name); }
 ;
 
 assmt
@@ -79,15 +84,9 @@ assmt
                   printf("str r%d r%d\n", reg--, reg - 1); }  // Gah!!
 ;
 
-arit_expr
-: arit_expr '+' term { printf("add r%d r%d r%d\n\n", reg - 1, reg, --reg - 1); }
-| term '+' term { printf("add r%d r%d r%d\n\n", reg - 1, reg, --reg - 1); }
-;
-
-term
+mem
 : MEM           { printf("ldi r%d %s\n", reg, $1.name);
                   printf("lod r%d r%d\n", reg++, reg); $$ = $1; }
-| INTLIT        { printf("ldi r%d %s\n", reg++, $1.name); }
 ;
 %%
 
