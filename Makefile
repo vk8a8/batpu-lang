@@ -1,5 +1,5 @@
 default: lex.l y.y
-	bison -dv y.y
+	bison -dv y.y -Wcounterexamples
 	lex lex.l
 	gcc y.tab.c lex.yy.c -o mbvl
 

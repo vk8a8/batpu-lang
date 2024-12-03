@@ -74,9 +74,9 @@ inlasm
 
 expr
 : mem
-| expr '+' mem      { printf("add r%d r%d r%d\n", reg - 1, reg, --reg - 1); }
-| expr '+' INTLIT   { printf("adi r%d %s\n", reg - 1, $3.name); }
-| INTLIT '+' expr   { printf("adi r%d %s\n", reg - 1, $1.name); }
+| expr '+' expr { printf("add r%d r%d r%d\n", reg - 1, reg, --reg - 1); }
+| expr '+' INTLIT   { printf("adi r%d %s\n", reg - 1, $3.name); } %prec '+'
+| INTLIT '+' expr   { printf("adi r%d %s\n", reg - 1, $1.name); } %prec '+'
 
 | expr '-' expr     { printf("sub r%d r%d r%d\n", reg - 1, reg, --reg - 1); }
 | expr '&' expr     { printf("and r%d r%d r%d\n", reg - 1, reg, --reg - 1); }
@@ -93,6 +93,7 @@ expr
 | '~' expr      { printf("not r%d r%d\n", reg - 1, reg - 1);}
 
 | INTLIT        { printf("ldi r%d %s\n", reg++, $1.name); $$ = $1; }
+| '(' expr ')'  { $$ = $2; }
 ;
 
 assmt
