@@ -26,7 +26,7 @@ extern FILE* yyin;
     } nd_obj;
 }
 
-%token <nd_obj> MEM ASM LABEL GOTO IDENT EQ_OP NE_OP IF INTLIT BW_NAND BW_NOR BW_XNOR
+%token <nd_obj> MEM ASM GOTO IDENT EQ_OP NE_OP IF INTLIT BW_NAND BW_NOR BW_XNOR
 %type <nd_obj> expr mem assmt program inlasm label goto_stmt if_stmt ';'
 
 %left '+' '-' '^' '&' '|' BW_NAND BW_NOR BW_XNOR
@@ -64,7 +64,7 @@ goto_stmt
 ;
 
 label
-: LABEL         { printf(".%s\n", $1.name); }
+: IDENT ':'     { printf(".%s\n", $1.name); }
 ;
 
 /* inline asm lol */

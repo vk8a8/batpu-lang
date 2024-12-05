@@ -25,7 +25,7 @@ Run the program with `./mbvl.exe [input file] > [output file]`
 $2 = 42;
 $1 = 1;
 
-:loop
+loop:
 if ($1 != $2) {
     $1 = $1 + 1;
     goto loop;

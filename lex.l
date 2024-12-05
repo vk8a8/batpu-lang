@@ -12,7 +12,6 @@ name  [a-zA-Z_][a-zA-Z_0-9]*
 "if"                { return IF; }
 
 "%".*               { strcpy(yylval.nd_obj.name, yytext + 1); return ASM; } // plus 1 because of percentage sign, same for others with preceeding symbols
-":"{name}           { strcpy(yylval.nd_obj.name, yytext + 1); return LABEL; }
 "$"{digit}+         { strcpy(yylval.nd_obj.name, yytext + 1); return MEM; }
 
 "=="                { return EQ_OP; }
