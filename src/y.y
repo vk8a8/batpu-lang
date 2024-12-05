@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
-#include "y.tab.h"
+#include <y.tab.h>
 
 int yylex();
 void yyerror(char* s);
