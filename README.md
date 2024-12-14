@@ -1,4 +1,4 @@
-# MattBat-Vk8a8 Language
+# BatPu Language
 This is a C-like language written in Bison and Lex, designed specially for MattBatWings' "BatPU" Minecraft CPU.
 
 This is still in WIP,as it currently does not support:
